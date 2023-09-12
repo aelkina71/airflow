@@ -1,2 +1,2 @@
 # airflow
-Examples for airflow-2023-09 course
+Examples for **airflow-2023-09** course

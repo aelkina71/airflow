@@ -1,0 +1,13 @@
+version: '2.1'
+services:
+  rabbit:
+    image: "rabbitmq:3-management"
+    hostname: "rabbit"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=123
+      - RABBITMQ_DEFAULT_VHOST=bo
+    restart: always

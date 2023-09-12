@@ -1,0 +1,22 @@
+version: "2.1"
+services:
+  rabbit:
+    extends:
+      file: rabbit.yml
+      service: rabbit
+  redis:
+    extends:
+      file: redis.yml
+      service: redis
+#  airflow:
+#    extends:
+#      file: airflow.yml
+#      service: airflow
+  clickhouse:
+    extends:
+      file: clickhouse.yml
+      service: clickhouse
+  postgres:
+    extends:
+      file: postgres.yml
+      service: postgres
