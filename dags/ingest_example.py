@@ -3,9 +3,10 @@ from datetime import datetime
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.providers.http.hooks.http import HttpHook
+from airflow.providers.postgres.operators.postgres import PostgresOperator
 
 
-def ingest_iss():
+def ingest_iss(**context):
     http_hook = HttpHook('GET', 'ingest-iss')
     # endpoint = http_hook.get_connection('ingest-iss').extra['iss_endpoint']
     # response = http_hook.run(endpoint=endpoint)
@@ -16,7 +17,13 @@ def ingest_iss():
     json_data = response.json()
     if json_data['message'] != 'successful':
         raise ValueError('Response message ', json_data)
+    context['ti'].xcom_push()
+    return
+
 
 
 with DAG(dag_id='branching_dag', start_date=datetime(2023,9,12)) as dag:
-    PythonOperator()
+    ingest_iss_task = PythonOperator(task_id='ingest_iss', python_callable=ingest_iss)
+    save_postgres_task = PostgresOperator(task_id='save_postgres', postgres_conn_id='postres-save', database='etl_test', sql="""
+    INSERT INTO iss_data(ts, latitude, longitude, message) VALUES()
+    """)
