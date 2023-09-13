@@ -22,10 +22,12 @@ with DAG(dag_id='branching_dag', start_date=datetime(2023,9,12)) as dag:
 
     task_dm = EmptyOperator(task_id='download_master')
     task_dv = EmptyOperator(task_id='download_visa')
+    task_dmir = EmptyOperator(task_id='download_mir')
 
     task_save_postgres = EmptyOperator(task_id='save_postgres')
 
     branch_task >> task_dv
     branch_task >> task_dm
+    branch_task >> task_dmir
     task_dv >> task_save_postgres
     task_dm >> task_save_postgres

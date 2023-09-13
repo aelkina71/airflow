@@ -15,7 +15,7 @@ services:
   clickhouse:
     extends:
       file: clickhouse.yml
-      service: clickhouse
+      service: server
   postgres:
     extends:
       file: postgres.yml
