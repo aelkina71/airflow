@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from airflow import DAG
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import BranchPythonOperator
@@ -15,7 +17,7 @@ def make_decision(**kwargs):
     return task_ids
 
 
-with DAG(dag_id='braching_dag') as dag:
+with DAG(dag_id='branching_dag', start_date=datetime(2023,9,12)) as dag:
     branch_task = BranchPythonOperator(task_id='make_decision', python_callable=make_decision, provide_context=True)
 
     task_dm = EmptyOperator(task_id='download_master')
@@ -23,7 +25,6 @@ with DAG(dag_id='braching_dag') as dag:
 
     task_save_postgres = EmptyOperator(task_id='save_postgres')
 
-    dag >> branch_task
     branch_task >> task_dv
     branch_task >> task_dm
     task_dv >> task_save_postgres
